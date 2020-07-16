@@ -8,8 +8,8 @@ jobs:
   assign-issue-to-board:
     runs-on: ubuntu-latest
     steps:
-      - uses: alex-page/github-project-automation-plus@v0.2.4
-        with:
-          project: Bugs
-          column: Needs triage
-          repo-token: ${{ secrets.ORG_PROJECT_GITHUB_TOKEN }}
+      - uses: takanabe/github-actions-automate-projects:v0.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.ORG_PROJECT_GITHUB_TOKEN }}
+          GITHUB_PROJECT_URL: https://github.com/orgs/TractorZoom/projects/4
+          GITHUB_PROJECT_COLUMN_NAME: Needs triage
