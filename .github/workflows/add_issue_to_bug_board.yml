@@ -1,0 +1,15 @@
+name: Add Issue to Bugs board
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign-issue-to-board:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: alex-page/github-project-automation-plus@v0.2.4
+        with:
+          project: Bugs
+          column: Needs triage
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
