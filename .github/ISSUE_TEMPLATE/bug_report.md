@@ -1,0 +1,27 @@
+**Tool:**
+
+**User:**
+
+**Summary of issue:**
+
+**Steps to reproduce:**
+
+**Expected results:**
+
+**Actual results:**
+
+**Screenshots:**
+- You can add screenshot in github after creating this bug, or add a link to your slack thread here.
+
+**Desktop (please complete the following information):**
+ - OS: [e.g. iOS]
+ - Browser [e.g. chrome, safari]
+ - Version [e.g. 22]
+
+**Smartphone (please complete the following information):**
+ - Device: [e.g. iPhone6]
+ - OS: [e.g. iOS8.1]
+ - Browser [e.g. stock browser, safari]
+ - Version [e.g. 22]
+
+**Additional context**
