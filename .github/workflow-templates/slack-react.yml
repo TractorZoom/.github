@@ -1,0 +1,45 @@
+name: Slack Auto-React (Approval & Merge)
+
+on:
+  pull_request:
+    types: [closed]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  auto_react:
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true) ||
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved')
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Search and React to Slack Message
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: "YOUR_SLACK_CHANNEL_ID_HERE"
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          EMOJI: ${{ github.event_name == 'pull_request' && 'git-merged' || 'white_check_mark' }}
+        run: |
+          HISTORY=$(curl -s -X GET \
+            -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+            "https://slack.com/api/conversations.history?channel=$SLACK_CHANNEL_ID&limit=100")
+          
+          if [ "$(echo "$HISTORY" | jq -r '.ok')" != "true" ]; then
+            echo "Slack API Error: $(echo "$HISTORY" | jq -r '.error')"
+            exit 1
+          fi
+
+          TS=$(echo "$HISTORY" | jq -r --arg URL "$PR_URL" '.messages[]? | select(.text | contains($URL)) | .ts' | head -n 1)
+
+          if [ -n "$TS" ] && [ "$TS" != "null" ]; then
+            echo "Found matching message (TS: $TS). Adding :$EMOJI: reaction..."
+            curl -s -X POST \
+              -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+              -H "Content-Type: application/json; charset=utf-8" \
+              -d "{\"channel\":\"$SLACK_CHANNEL_ID\",\"timestamp\":\"$TS\",\"name\":\"$EMOJI\"}" \
+              https://slack.com/api/reactions.add > /dev/null
+          else
+            echo "No matching Slack message found for PR: $PR_URL"
+          fi
