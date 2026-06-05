@@ -1,0 +1,8 @@
+{
+    "name": "Slack PR Auto-Reactor",
+    "description": "Automatically stamps a merge emoji or checkmark on Slack PR messages when approved or merged.",
+    "iconName": "octicon smiley",
+    "categories": [
+        "Automation"
+    ]
+}
