@@ -6,10 +6,6 @@ on:
       SLACK_CHANNEL_ID:
         required: true
         type: string
-  pull_request:
-    types: [closed]
-  pull_request_review:
-    types: [submitted]
 
 jobs:
   auto_react:
