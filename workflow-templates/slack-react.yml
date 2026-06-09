@@ -1,4 +1,4 @@
-name: Slack Auto-React (Approval & Merge)
+name: Slack Auto-React
 
 on:
   pull_request:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   trigger-slack-reaction:
-  #pointer to shared logic
     uses: tractorzoom/.github/.github/workflows/shared-slack-logic.yml@main
+    with:
+      SLACK_CHANNEL_ID: "C0906CYECPP" 
     secrets: inherit

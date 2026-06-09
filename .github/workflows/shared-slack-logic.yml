@@ -2,6 +2,10 @@ name: Slack Auto-React (Approval & Merge)
 
 on:
   workflow_call:
+    inputs:
+      SLACK_CHANNEL_ID:
+        required: true
+        type: string
   pull_request:
     types: [closed]
   pull_request_review:
@@ -19,7 +23,7 @@ jobs:
       - name: Search and React to Slack Message
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ vars.SLACK_CHANNEL_ID }}
+          SLACK_CHANNEL_ID: ${{ inputs.SLACK_CHANNEL_ID }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           EMOJI: ${{ github.event_name == 'pull_request' && 'git-merged' || 'white_check_mark' }}
         run: |
