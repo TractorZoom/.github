@@ -10,7 +10,7 @@ on:
 
 jobs:
   trigger-slack-reaction:
-    uses: tractorzoom/.github/.github/workflows/shared-toast-logic.yml@master
+    uses: tractorzoom/.github/.github/workflows/shared-toast-logic.yml@toastYML
     with:
       SLACK_CHANNEL_ID: "SLACK_CHANNEL_ID_HERE" 
     secrets: inherit
