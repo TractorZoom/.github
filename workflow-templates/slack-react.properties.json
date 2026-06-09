@@ -1,6 +1,6 @@
 {
     "name": "Slack PR Auto-Reactor",
-    "description": "Automatically stamps a merge emoji or checkmark on Slack PR messages when approved or merged.",
+    "description": "Reacts and threads a comment on Slack PR messages when approved, merged, commented on, or marked ready for review.",
     "iconName": "octicon smiley",
     "categories": [
         "Automation"
