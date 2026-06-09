@@ -8,7 +8,7 @@ on:
 
 jobs:
   trigger-slack-reaction:
-    uses: tractorzoom/.github/.github/workflows/shared-slack-logic.yml@main
+    uses: tractorzoom/.github/.github/workflows/shared-slack-logic.yml@master
     with:
       SLACK_CHANNEL_ID: "SLACK_CHANNEL_ID_HERE" 
     secrets: inherit
