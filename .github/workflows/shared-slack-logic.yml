@@ -51,8 +51,8 @@ jobs:
                 echo "Review state is '$REVIEW_STATE'; skipping."
                 exit 0
               fi
-              EMOJI="white_check_mark"
-              COMMENT=":white_check_mark: Approved by $GITHUB_ACTOR"
+              EMOJI="git-approved"
+              COMMENT=":git-approved: Approved by $GITHUB_ACTOR"
               ;;
             issue_comment)
               EMOJI="speech_balloon"
