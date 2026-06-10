@@ -12,5 +12,5 @@ jobs:
   trigger-slack-reaction:
     uses: tractorzoom/.github/.github/workflows/shared-slack-logic.yml@master
     with:
-      SLACK_CHANNEL_ID: "SLACK_CHANNEL_ID_HERE" 
+      SLACK_CHANNEL_ID: ${{ vars.DATA_TEAM_PRS_SLACK_CHANNEL_ID }} 
     secrets: inherit
