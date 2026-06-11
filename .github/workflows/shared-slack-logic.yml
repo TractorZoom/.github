@@ -6,6 +6,9 @@ on:
       SLACK_CHANNEL_ID:
         required: true
         type: string
+    secrets:
+      SLACK_BOT_TOKEN:
+        required: true
 
 jobs:
   auto_react:

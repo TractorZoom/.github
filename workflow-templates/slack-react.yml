@@ -13,4 +13,5 @@ jobs:
     uses: tractorzoom/.github/.github/workflows/shared-slack-logic.yml@master
     with:
       SLACK_CHANNEL_ID: ${{ vars.DATA_TEAM_PRS_SLACK_CHANNEL_ID }} 
-    secrets: inherit
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
