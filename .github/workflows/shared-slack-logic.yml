@@ -8,7 +8,7 @@ on:
         type: string
     secrets:
       SLACK_BOT_TOKEN:
-        required: true
+        required: false
 
 jobs:
   auto_react:
