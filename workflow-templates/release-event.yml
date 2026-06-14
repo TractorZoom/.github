@@ -1,0 +1,23 @@
+name: Release Event
+
+# Emits a release event to event-streaming (-> Databricks) when code ships.
+# Adoption notes:
+#   * Set `team` below to your team's name (becomes a grouping dimension).
+#   * This template fires on every push to main. If your repo continuously
+#     deploys on merge, that equals a release. If you gate prod on tests, prefer
+#     calling the shared workflow as a `needs: [deploy-to-prod]` job inside your
+#     deploy workflow instead, so events only fire on a successful prod deploy.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  release-event:
+    uses: tractorzoom/.github/.github/workflows/shared-release-event.yml@master
+    with:
+      team: your-team-name

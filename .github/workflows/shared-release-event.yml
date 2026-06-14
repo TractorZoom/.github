@@ -1,0 +1,60 @@
+name: Shared Release Event
+
+on:
+  workflow_call:
+    inputs:
+      team:
+        description: 'Team that owns the released repo (e.g. valuations). Becomes a grouping dimension in Databricks.'
+        required: true
+        type: string
+      events-url:
+        description: 'Event-streaming ingest endpoint.'
+        required: false
+        type: string
+        default: https://events.prod.tractorzoom.com
+
+jobs:
+  emit-release-event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post release event to event-streaming
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TEAM: ${{ inputs.team }}
+          EVENTS_URL: ${{ inputs.events-url }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          # Find the merged PR for this commit.
+          PR=$(gh pr list --repo "$REPO" --search "$SHA" \
+                 --state merged --json number,title,author,mergedBy,headRefName --limit 1)
+
+          TITLE=$(jq -r '.[0].title // ""' <<<"$PR")
+          HEAD_BRANCH=$(jq -r '.[0].headRefName // ""' <<<"$PR")
+
+          JIRA=$(printf '%s\n%s\n' "$TITLE" "$HEAD_BRANCH" \
+                  | grep -oE '[A-Z]+-[0-9]+' | sort -u | jq -R . | jq -sc . || echo '[]')
+
+
+          CONTENT=$(jq -nc \
+            --arg team       "$TEAM" \
+            --arg repo       "$REPO" \
+            --arg pr         "$(jq -r '.[0].number // ""' <<<"$PR")" \
+            --arg title      "$TITLE" \
+            --argjson jira   "${JIRA:-[]}" \
+            --arg sha        "$SHA" \
+            --arg created_by "$(jq -r '.[0].author.login // ""' <<<"$PR")" \
+            --arg merged_by  "$(jq -r '.[0].mergedBy.login // ""' <<<"$PR")" \
+            --arg branch     "$BRANCH" \
+            '{team:$team, repo:$repo, pr_number:$pr, pr_title:$title, jira_keys:$jira,
+              commit_sha:$sha, created_by:$created_by, merged_by:$merged_by, branch:$branch}')
+
+          jq -nc \
+            --arg ts      "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
+            --arg content "$CONTENT" \
+            '{name:"internal__github__release", source:"github", timestamp:$ts, data:{content:$content}}' \
+          | curl -fsS -X POST "$EVENTS_URL" \
+              -H 'Content-Type: application/json' -d @-

@@ -1,0 +1,8 @@
+{
+    "name": "Release Event Tracker",
+    "description": "Posts a release event (team, PR, creator, merger, Jira keys) to event-streaming for Databricks when code ships to prod.",
+    "iconName": "octicon rocket",
+    "categories": [
+        "Automation"
+    ]
+}
